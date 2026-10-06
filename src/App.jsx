@@ -44,7 +44,7 @@ export default function App() {
       <header className="topbar">
         <a className="brand" href="#home" aria-label="Clima, home page">
           <span className="brand-mark"><Icon name="sun" size={19} /></span>
-          <span>clima<span className="brand-dot">.</span></span>
+          <span className="brand-copy"><span className="brand-name">Clima<span className="brand-dot">.</span></span><span className="brand-credit">@ built by Adrian Statescu</span></span>
         </a>
         <div className="topbar-note"><span className="live-dot" /> WEATHER AT A GLANCE</div>
       </header>

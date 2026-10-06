@@ -3,7 +3,10 @@
 .weather-app::before { content: ''; position: absolute; inset: 0; opacity: .12; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E"); }
 .topbar, .footer { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; width: min(1120px, calc(100% - 64px)); margin: 0 auto; }
 .topbar { height: 88px; border-bottom: 1px solid rgba(255,255,255,.08); }
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #f7f6ef; font: 800 23px 'Manrope', sans-serif; letter-spacing: -1.4px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #f7f6ef; }
+.brand-copy { display: inline-flex; align-items: baseline; gap: 9px; white-space: nowrap; }
+.brand-name { font: 800 23px 'Manrope', sans-serif; letter-spacing: -1.4px; }
+.brand-credit { color: #a0a096; font: 500 11px 'DM Sans', sans-serif; letter-spacing: .1px; }
 .brand-mark { display: grid; place-items: center; width: 32px; height: 32px; color: #171710; background: var(--accent); border-radius: 11px; transform: rotate(-7deg); }
 .brand-mark svg { transform: rotate(7deg); }
 .brand-dot { color: var(--accent); }
@@ -66,7 +69,8 @@ h1 span { color: var(--accent); }
 
 @media (max-width: 600px) {
   .topbar, .footer { width: calc(100% - 40px); }
-  .topbar { height: 72px; }.topbar-note { font-size: 8px; letter-spacing: 1px; }
+  .topbar { height: 72px; }.topbar-note { display: none; }
+  .brand-copy { gap: 6px; }.brand-name { font-size: 21px; }.brand-credit { font-size: 10px; }
   .main-content { padding: 60px 0 52px; }.intro-copy { max-width: 310px; font-size: 13px; }
   .search-box { margin-top: 27px; height: 58px; padding-left: 14px; gap: 9px; }.search-box button { min-width: 52px; padding: 0 14px; }.button-label { display: none; }
   .weather-card { padding: 20px 16px; }.weather-badge { font-size: 7px; }.temperature { font-size: 80px; }.temperature span { font-size: 52px; vertical-align: 19px; }.weather-main { min-height: 140px; }
