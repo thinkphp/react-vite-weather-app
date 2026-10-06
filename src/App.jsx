@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+
 function Icon({ name, size = 20 }) {
   const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true };
   if (name === 'search') return <svg {...common}><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>;
@@ -26,7 +28,7 @@ export default function App() {
     setVreme(null);
     try {
       // The frontend calls only our Express proxy; API credentials stay on the server.
-      const res = await fetch(`/api/vremea/${encodeURIComponent(numeOras)}`);
+      const res = await fetch(`${API_BASE_URL}/api/vremea/${encodeURIComponent(numeOras)}`);
       const data = await res.json();
       if (!res.ok) setEroare(data.error || 'Something went wrong. Please try again.');
       else setVreme(data);

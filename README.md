@@ -102,4 +102,12 @@ npm run lint     # Run ESLint
 
 ## Configuration and deployment
 
-The Vite proxy in `vite.config.js` is for local development. A production deployment also needs the Express API to be hosted and the frontend configured to send API requests to that hosted server. Store `OPENWEATHER_API_KEY` as a server-side environment variable; do not commit the `.env` file.
+The Vite proxy in `vite.config.js` is for local development. For a Vercel and Railway deployment, configure these environment variables:
+
+| Service | Variable | Value |
+| --- | --- | --- |
+| Vercel frontend | `VITE_API_URL` | Public Railway service URL, such as `https://your-weather-api.up.railway.app` |
+| Railway API | `OPENWEATHER_API_KEY` | Your OpenWeather API key |
+| Railway API | `FRONTEND_URL` | Your Vercel site origin, such as `https://your-weather-app.vercel.app` |
+
+Set `FRONTEND_URL` to the exact deployed Vercel origin, without a trailing slash. `VITE_API_URL` is read at frontend build time, so redeploy Vercel after changing it. Keep the OpenWeather key only in Railway's environment variables (and in your local, ignored `weather-api/.env`); never add it to the frontend or commit it.
