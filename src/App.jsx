@@ -28,12 +28,16 @@ export default function App() {
     setVreme(null);
     try {
       // The frontend calls only our Express proxy; API credentials stay on the server.
-      const res = await fetch(`${API_BASE_URL}/api/vremea/${encodeURIComponent(numeOras)}`);
+      const res = await fetch(`${API_BASE_URL}/api/vremea/${encodeURIComponent(numeOras)}`, {
+        signal: AbortSignal.timeout(15000)
+      });
       const data = await res.json();
       if (!res.ok) setEroare(data.error || 'Something went wrong. Please try again.');
       else setVreme(data);
-    } catch {
-      setEroare('Could not reach the server. Check that it is running and try again.');
+    } catch (err) {
+      setEroare(err.name === 'TimeoutError'
+        ? 'The request took too long. Check your connection and try again.'
+        : 'Could not reach the server. Check that it is running and try again.');
     } finally {
       setSeIncarca(false);
     }
@@ -68,24 +72,42 @@ export default function App() {
         {eroare && <div className="error-message" role="alert">{eroare}</div>}
 
         {vreme ? (
-          <section className="weather-card" aria-live="polite">
-            <div className="weather-card-top">
-              <div><p className="card-kicker">CURRENT WEATHER</p><h2><Icon name="pin" size={18} />{vreme.oras}</h2></div>
-              <span className="weather-badge">JUST UPDATED</span>
-            </div>
-            <div className="weather-main">
-              <div className="temperature">{Math.round(vreme.temperatura)}<span>°</span></div>
-              <div className="conditions">
-                <img src={`https://openweathermap.org/img/wn/${vreme.iconaCod}@2x.png`} alt="" />
-                <span>{vreme.descriere}</span>
+          <div className="weather-results" aria-live="polite">
+            <section className="weather-card">
+              <div className="weather-card-top">
+                <div><p className="card-kicker">CURRENT WEATHER</p><h2><Icon name="pin" size={18} />{vreme.oras}</h2></div>
+                <span className="weather-badge">JUST UPDATED</span>
               </div>
-            </div>
-            <div className="weather-details">
-              <div className="detail"><span className="detail-icon"><Icon name="sun" /></span><div><span className="detail-label">FEELS LIKE</span><strong>{Math.round(vreme.senzatieTermica)}°C</strong></div></div>
-              <div className="detail"><span className="detail-icon"><Icon name="drop" /></span><div><span className="detail-label">HUMIDITY</span><strong>{vreme.umiditate}%</strong></div></div>
-              <div className="detail"><span className="detail-icon"><Icon name="wind" /></span><div><span className="detail-label">WIND</span><strong>{vreme.vantKmH} <small>km/h</small></strong></div></div>
-            </div>
-          </section>
+              <div className="weather-main">
+                <div className="temperature">{Math.round(vreme.temperatura)}<span>°</span></div>
+                <div className="conditions">
+                  <img src={`https://openweathermap.org/img/wn/${vreme.iconaCod}@2x.png`} alt="" />
+                  <span>{vreme.descriere}</span>
+                </div>
+              </div>
+              <div className="weather-details">
+                <div className="detail"><span className="detail-icon"><Icon name="sun" /></span><div><span className="detail-label">FEELS LIKE</span><strong>{Math.round(vreme.senzatieTermica)}°C</strong></div></div>
+                <div className="detail"><span className="detail-icon"><Icon name="drop" /></span><div><span className="detail-label">HUMIDITY</span><strong>{vreme.umiditate}%</strong></div></div>
+                <div className="detail"><span className="detail-icon"><Icon name="wind" /></span><div><span className="detail-label">WIND</span><strong>{vreme.vantKmH} <small>km/h</small></strong></div></div>
+              </div>
+            </section>
+            <section className="weather-card tomorrow-card" aria-label="Weather forecast for tomorrow">
+              <div className="weather-card-top">
+                <div><p className="card-kicker">TOMORROW'S FORECAST</p><h2>{vreme.oras}</h2></div>
+                <span className="weather-badge">FORECAST</span>
+              </div>
+              <div className="tomorrow-forecast">
+                <div className="tomorrow-heading">
+                  <span className="detail-label">HIGH / LOW</span>
+                  <span className="tomorrow-temperatures"><strong>{vreme.maine.maxima}°</strong><span>{vreme.maine.minima}°</span></span>
+                </div>
+                <div className="tomorrow-conditions">
+                  <img src={`https://openweathermap.org/img/wn/${vreme.maine.iconaCod}@2x.png`} alt="" />
+                  <span>{vreme.maine.descriere}</span>
+                </div>
+              </div>
+            </section>
+          </div>
         ) : !eroare && (
           <div className="empty-state">
             <div className="weather-art" aria-hidden="true"><span className="sun-disc" /><span className="cloud cloud-back" /><span className="cloud cloud-front" /><span className="art-spark spark-one">✳</span><span className="art-spark spark-two">✳</span></div>
